@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Room Grid View || Hotel ATR</title>
+    <title>Home Page || Hotel ATR</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicon Icon -->
-    <link rel="shortcut icon" type="~/image/x-icon" href="img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.ico">
 
     <!-- All css here -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12">
                     <div class="logo">
-                        <a href="index.html"><img src="~/img/logo/logo.png" alt="HotelATR"></a>
+                        <a asp-controller="Home" asp-action="Index"><img src="img/logo/logo.png" alt="HotelATR"></a>
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-8 col-sm-8 hidden-xs">
@@ -47,7 +47,7 @@
                     <div class="main-menu hidden-xs">
                         <nav>
                             <ul>
-                                <li><a href="index.html">HOME</a></li>
+                                <li><a asp-controller="Home" asp-action="Index">HOME</a></li>
                                 <li>
                                     <a href="room-grid.html">ROOMS</a>
                                     <ul class="submenu">
@@ -131,7 +131,49 @@
         <!-- Mobile Menu Area end -->
     </header>
     <!-- Header Area End -->
-    
+    <!-- Background Area Start -->
+    <section class="slider-area">
+        <div class="slider-wrapper">
+            <div class="single-slide" style="background-image: url('img/slider/1.jpg');">
+                <div class="banner-content overlay">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="text-content-wrapper">
+                                    <div class="text-content text-center">
+                                        <h1 class="pt-180">welcome to hotel atr</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                        <div class="banner-btn">
+                                            <a class="default-btn" href="room-grid.html">explore</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slide" style="background-image: url('img/slider/2.jpg');">
+                <div class="banner-content overlay">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="text-content-wrapper slide-two">
+                                    <div class="text-content text-center">
+                                        <h1 class="pt-180">welcome to hotel atr</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                        <div class="banner-btn">
+                                            <a class="default-btn" href="room-grid.html">explore</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     @RenderBody()
      
