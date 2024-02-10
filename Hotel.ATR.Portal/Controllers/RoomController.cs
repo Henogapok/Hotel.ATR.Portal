@@ -12,9 +12,15 @@ namespace Hotel.ATR.Portal.Controllers
             this.webHost = webHost;
         }
 
-        public IActionResult Index(int page, int counter)
+        public IActionResult Index()
         {
-            return View();
+            var user = new User() { email = "ok@ok.kz", name = "asd" };
+            ViewBag.User = user;
+            ViewData["user"] = user;
+            TempData["user"] = user;
+
+
+            return View(user);
         }
         public IActionResult RoomList()
         {
@@ -42,7 +48,9 @@ namespace Hotel.ATR.Portal.Controllers
                 userFile.CopyTo(stream);
             }
 
-            return View();
+            //return View("Index");
+            return RedirectToAction("Index");
+            //return View("~/Views/Home/Index.cshtml");
         }
     }
 }
