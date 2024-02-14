@@ -14,13 +14,7 @@ namespace Hotel.ATR.Portal.Controllers
 
         public IActionResult Index()
         {
-            var user = new User() { email = "ok@ok.kz", name = "asd" };
-            ViewBag.User = user;
-            ViewData["user"] = user;
-            TempData["user"] = user;
-
-
-            return View(user);
+            return View();
         }
         public IActionResult RoomList()
         {
