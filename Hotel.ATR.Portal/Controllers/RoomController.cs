@@ -6,14 +6,20 @@ namespace Hotel.ATR.Portal.Controllers
     public class RoomController : Controller
     {
         private IWebHostEnvironment webHost;
+        private readonly ILogger<RoomController> _logger;
 
-        public RoomController(IWebHostEnvironment webHost)
+        public RoomController(IWebHostEnvironment webHost, ILogger<RoomController> _logger)
         {
             this.webHost = webHost;
+            this._logger = _logger;
         }
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Logging Information");
+            _logger.LogError("Logging Error");
+            _logger.LogWarning("Logging Warning");
+            _logger.LogDebug("Logging Debug");
             return View();
         }
         public IActionResult RoomList()

@@ -11,4 +11,22 @@
     <li><a asp-controller="Event" asp-action="Index">EVENT</a></li>
     <li><a asp-controller="Team" asp-action="Index">TEAM</a></li>
     <li><a asp-controller="Home" asp-action="Contact">CONTACT</a></li>
+
+    <li>
+        @if (User.Identity.IsAuthenticated){
+        
+            <a asp-controller="Home" asp-action="Logout">
+                @User.Identity.Name | 
+                Logout
+            </a>
+
+        }
+        else
+        {
+            <a asp-controller="Home" asp-action="Login">
+                Login
+            </a>
+        }
+    </li>
+
 </ul>

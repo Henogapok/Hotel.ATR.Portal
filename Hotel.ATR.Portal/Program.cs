@@ -1,7 +1,55 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Serilog.Events;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
+//builder.Host.ConfigureLogging(logging => {
+//    logging.ClearProviders();
+//    logging
+//    //.AddDebug()
+//    //.AddConsole()
+//    //.AddEventLog()
+//    .AddSeq();
+//    }
+//);
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Home/login";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//builder.Services.AddTransient<IRepository, Repository>();
+
+string connectionString = builder.Configuration.GetConnectionString("DemoSeriLogDB");
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Seq("http://localhost:5341/")
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.MSSqlServer(connectionString, sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions { TableName = "Log" }, null, null, LogEventLevel.Information, null, null, null, null)
+    .CreateLogger();
+
+builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);
+
+builder.Services.Configure<CookieTempDataProviderOptions>(options =>
+{
+    options.Cookie.IsEssential = true;
+    options.Cookie.Domain = "localhost:62029";
+    options.Cookie.Expiration = TimeSpan.FromSeconds(160);
+});
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.Name = "AspSessionName";
+});
+
+
 
 var app = builder.Build();
 
@@ -12,9 +60,12 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
+app.UseSession();
+
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
