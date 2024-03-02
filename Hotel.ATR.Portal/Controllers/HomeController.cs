@@ -19,6 +19,8 @@ namespace Hotel.ATR.Portal.Controllers
             _httpContext = httpContext;
         }
 
+        
+        [Route("IndexNew")]
         public IActionResult Index()
         {
             _httpContext.HttpContext.Response.Cookies.Append("iin", "880111300392");
@@ -82,8 +84,10 @@ namespace Hotel.ATR.Portal.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                Task.Delay(100).Wait();
-                return Redirect(ReturnUrl);
+
+                if (!ReturnUrl.Contains("Index"))
+                    ReturnUrl += "/Index";
+                return View(ReturnUrl);
             }
             return View();
         }

@@ -1,4 +1,11 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+
+@inject IOptions<RequestLocalizationOptions> locOptions
+
+
+@{
     Layout = "_HomeLayout";
 }
 
@@ -92,5 +99,20 @@
             </div>
         </div>
     </div>
+
+    <form>
+        <label>
+            Language:
+        </label>
+        <select>
+            <option>выберите язык</option>
+            @foreach(CulterInfo item in locOptions.Value.SupportedUICultures){
+                <option value="@item.Name">
+                    @item.Name | @item.DisplayName
+                </option>
+            }
+        </select>
+    </form>
+
 </section>
 <!-- About Us Area End -->

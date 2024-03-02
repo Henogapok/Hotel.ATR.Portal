@@ -1,4 +1,5 @@
 ﻿using Hotel.ATR.Portal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.ATR.Portal.Controllers
@@ -14,6 +15,7 @@ namespace Hotel.ATR.Portal.Controllers
             this._logger = _logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             _logger.LogInformation("Logging Information");
