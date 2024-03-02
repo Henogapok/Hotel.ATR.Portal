@@ -105,8 +105,8 @@
             Language:
         </label>
         <select>
-            <option>выберите язык</option>
-            @foreach(CulterInfo item in locOptions.Value.SupportedUICultures){
+            <option>Выберите язык</option>
+            @foreach(var item in locOptions.Value.SupportedUICultures){
                 <option value="@item.Name">
                     @item.Name | @item.DisplayName
                 </option>
