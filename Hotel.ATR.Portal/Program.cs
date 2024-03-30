@@ -1,3 +1,4 @@
+using Hotel.ATR.Portal.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
+using System.Drawing.Text;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +44,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedCultures = cultures;
     options.SupportedUICultures = cultures;
 });
+builder.Services.AddLocalization(option => option.ResourcesPath = "Resources");
 //builder.Services.AddTransient<IRepository, Repository>();
 
 string connectionString = builder.Configuration.GetConnectionString("DemoSeriLogDB");
@@ -71,6 +74,16 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "AspSessionName";
 });
 
+/*static void HandleMapOpen(IApplicationBuilder app)
+{
+    app.Run(async context =>
+    {
+        await context
+        .Response
+        .WriteAsync("Hello");
+    });
+}*/
+
 
 
 var app = builder.Build();
@@ -84,11 +97,35 @@ app.UseStaticFiles();
 
 app.UseSession();
 
+/*app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("Before invoke app.Use\n");
+    await next();
+    await context.Response.WriteAsync("After invoke app.Use\n");
+
+});
+
+app.Map("/m1", HandleMapOpen);
+
+app.Map("/m2", appMap =>
+    {
+        appMap.Run(async context =>
+        {
+            await context
+            .Response
+            .WriteAsync("Hello!");
+        });
+    }
+);*/
+
 app.UseRouting();
+
+app.UseContentMiddleware();
 
 var localOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 
 app.UseRequestLocalization(localOptions.Value);
+
 
 app.UseAuthorization();
 app.UseAuthentication();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Hotel.ATR.Portal.Controllers
@@ -20,9 +21,15 @@ namespace Hotel.ATR.Portal.Controllers
         }
 
         
-        [Route("IndexNew")]
-        public IActionResult Index()
+        //[Route("IndexNew")]
+        public IActionResult Index(string culture)
         {
+            if (!string.IsNullOrWhiteSpace(culture))
+            {
+                CultureInfo.CurrentCulture = new CultureInfo(culture);
+                CultureInfo.CurrentUICulture = new CultureInfo(culture);
+            }
+
             _httpContext.HttpContext.Response.Cookies.Append("iin", "880111300392");
             var data2 = _httpContext.HttpContext.Request.Cookies["iin"];
 
@@ -107,6 +114,15 @@ namespace Hotel.ATR.Portal.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public JsonResult GetUser()
+        {
+            User user = new User();
+            user.email = "kskfbdoc@gmail.com";
+            user.name = "Valeriy";
+
+            return Json(user);
         }
     }
 }

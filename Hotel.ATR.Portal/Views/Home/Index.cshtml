@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Builder
 @using Microsoft.AspNetCore.Localization
 @using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IOptions<RequestLocalizationOptions> locOptions
+@inject IViewLocalizer _lang
 
 
 @{
@@ -83,7 +85,7 @@
             <div class="col-md-5">
                 <div class="about-text">
                     <div class="section-title">
-                        <h3>about us</h3>
+                        <h3>@_lang["aboutus"]</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utjij enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi utjjij aliquip ex ea commodo consequat.</p>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
                         <p>Fipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
@@ -99,20 +101,42 @@
             </div>
         </div>
     </div>
-
-    <form>
+    <!-- Language Selection End -->
+    <form asp-action="Index" id="cultureForm">
         <label>
             Language:
         </label>
-        <select>
+        <select onchange="SetCulture(this.value);">
             <option>Выберите язык</option>
-            @foreach(var item in locOptions.Value.SupportedUICultures){
+            @foreach (var item in locOptions.Value.SupportedUICultures)
+            {
                 <option value="@item.Name">
                     @item.Name | @item.DisplayName
                 </option>
             }
         </select>
     </form>
+    <!-- Language Selection End -->
 
 </section>
 <!-- About Us Area End -->
+@section scripts
+{
+    <script>
+
+        $(document).ready(function()
+        {
+            $.ajax({
+                url: "http://localhost:5189/home/GetUser"
+            }).done(function(data){
+                console.log(data);
+            })
+        })
+
+        function SetCulture(selectValue){
+            var culture = "/?culture=" + selectValue;
+            document.getElementById("cultureForm").action = culture;
+            document.getElementById("cultureForm").submit();
+        }
+    </script>
+}
