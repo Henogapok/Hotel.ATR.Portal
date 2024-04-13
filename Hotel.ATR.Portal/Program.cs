@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
-using System.Drawing.Text;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +73,25 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "AspSessionName";
 });
 
+/*builder.Services.AddCors(cors =>
+{
+    cors.AddPolicy("Policy_1", builder => builder
+        .WithOrigins("http://localhost:5189/home/GetUser")
+        .WithMethods("GET"));
+});*/
+
+var policyName = "Policy_1";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:62029/",
+                                "http://localhost:5189/home/GetUser")
+                .AllowCredentials();
+        });
+});
+
 /*static void HandleMapOpen(IApplicationBuilder app)
 {
     app.Run(async context =>
@@ -119,6 +137,8 @@ app.Map("/m2", appMap =>
 );*/
 
 app.UseRouting();
+
+app.UseCors(policyName);
 
 app.UseContentMiddleware();
 
