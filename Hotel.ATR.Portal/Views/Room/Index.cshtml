@@ -1,4 +1,7 @@
-﻿<!-- Breadcrumb Area Start-->
+﻿@model RoomData
+
+
+<!-- Breadcrumb Area Start-->
 <section class="breadcrumb-area overlay-dark-2 bg-3">
     <div class="container">
         <div class="row">
@@ -32,114 +35,26 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/5.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Single Room</a></h3>
-                            <div class="p-amount">
-                                <span>$220</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/6.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Deluxe Suit</a></h3>
-                            <div class="p-amount">
-                                <span>$150</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
+            @foreach(Room item in Model.Rooms){
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-room">
+                        <img src=@item.PathToImage alt="">
+                        <div class="room-hover text-center">
+                            <div class="hover-text">
+                                <h3><a href="room-details.html">@item.Name</a></h3>
+                                <div class="p-amount">
+                                    <span>$@item.Price</span>
+                                    <span class="count">Per Night</span>
+                                </div>
+                                <p>@item.Description</p>
+                                <div class="room-btn">
+                                    <a href="room-details.html" class="default-btn">DETAILS</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/7.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Royal Suit</a></h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="p-amount">
-                                <span>$240</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/8.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Double Room</a></h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="p-amount">
-                                <span>$180</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/9.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Deluxe Suit</a></h3>
-                            <div class="p-amount">
-                                <span>$130</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-room">
-                    <img src="~/img/room/5.jpg" alt="">
-                    <div class="room-hover text-center">
-                        <div class="hover-text">
-                            <h3><a href="room-details.html">Single Room</a></h3>
-                            <div class="p-amount">
-                                <span>$220</span>
-                                <span class="count">Per Night</span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                            <div class="room-btn">
-                                <a href="room-details.html" class="default-btn">DETAILS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
             <div class="col-md-12 fix">
                 <div class="pagination-content text-center">
                     <ul class="pagination">
@@ -155,7 +70,7 @@
 <!-- Room Area End -->
 <!-- Client Area Start -->
 @{
-    Html.RenderPartial("_ClientArea");
+    Html.RenderPartial("_ClientArea", Model);
 }
 <!-- Client Area End -->
 <!-- Newsletter Area Start -->

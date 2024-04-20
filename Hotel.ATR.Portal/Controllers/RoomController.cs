@@ -1,6 +1,7 @@
 ﻿using Hotel.ATR.Portal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Hotel.ATR.Portal.Controllers
 {
@@ -8,21 +9,27 @@ namespace Hotel.ATR.Portal.Controllers
     {
         private IWebHostEnvironment webHost;
         private readonly ILogger<RoomController> _logger;
+        private HotelAtrContext _db;
 
-        public RoomController(IWebHostEnvironment webHost, ILogger<RoomController> _logger)
+        public RoomController(IWebHostEnvironment webHost, ILogger<RoomController> _logger, HotelAtrContext db)
         {
             this.webHost = webHost;
             this._logger = _logger;
+            _db = db;
         }
 
-        [Authorize]
+        //[Authorize]
         public IActionResult Index()
         {
+            RoomData rd = new RoomData();
+            rd.Rooms = _db.Rooms.ToList();
+            rd.Clients = _db.Clients.ToList();
+
             _logger.LogInformation("Logging Information");
             _logger.LogError("Logging Error");
             _logger.LogWarning("Logging Warning");
             _logger.LogDebug("Logging Debug");
-            return View();
+            return View(rd);
         }
         public IActionResult RoomList()
         {

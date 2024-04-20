@@ -1,8 +1,10 @@
+using Hotel.ATR.Portal;
 using Hotel.ATR.Portal.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
@@ -11,6 +13,11 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
+
+string connectionString = "data source=178.89.186.221, 1434;initial catalog=aprelev_db;user id=aprelev_user;password=hH583z3i^;MultipleActiveResultSets=True;application name=EntityFramework;TrustServerCertificate=True";
+builder.Services.AddDbContext<HotelAtrContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.Configure<APIEndpoint>(builder.Configuration.GetSection("APIEndpoint"));
 //builder.Host.ConfigureLogging(logging => {
 //    logging.ClearProviders();
 //    logging
@@ -45,15 +52,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 });
 builder.Services.AddLocalization(option => option.ResourcesPath = "Resources");
 //builder.Services.AddTransient<IRepository, Repository>();
-
-string connectionString = builder.Configuration.GetConnectionString("DemoSeriLogDB");
-
-
-    Log.Logger = new LoggerConfiguration()
-        .WriteTo.Seq("http://localhost:5341/")
-        .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-        .WriteTo.MSSqlServer(connectionString, sinkOptions: new MSSqlServerSinkOptions { TableName = "Log" }, null, null, LogEventLevel.Error, null, null, null, null)
-        .CreateLogger();
 
 
 builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Claims;
@@ -13,17 +14,29 @@ namespace Hotel.ATR.Portal.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private IHttpContextAccessor _httpContext;
+        private IConfiguration _config;
+        private IOptions<APIEndpoint> _settings;
 
-        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContext)
+        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContext, IConfiguration config, IOptions<APIEndpoint> settings)
         {
             _logger = logger;
             _httpContext = httpContext;
+            _config = config;
+            _settings = settings;
         }
 
-        
+
         //[Route("IndexNew")]
         public IActionResult Index(string culture)
         {
+            var data0 = _settings.Value.Url;
+            var data = _config.GetSection("APIEndpoint")
+                .GetSection("Name").Value;
+            var data2 = _config.GetSection("APIEndpoint:Name").Value;
+            var data3 = _config.GetSection("APIEndpoint")
+                .GetValue<bool>("IsSecured");
+
+
             if (!string.IsNullOrWhiteSpace(culture))
             {
                 CultureInfo.CurrentCulture = new CultureInfo(culture);
@@ -31,7 +44,7 @@ namespace Hotel.ATR.Portal.Controllers
             }
 
             _httpContext.HttpContext.Response.Cookies.Append("iin", "880111300392");
-            var data2 = _httpContext.HttpContext.Request.Cookies["iin"];
+            var data4 = _httpContext.HttpContext.Request.Cookies["iin"];
 
             HttpContext.Session.SetString("iin", "880111300392");
             var sessionData = HttpContext.Session.GetString("iin");
