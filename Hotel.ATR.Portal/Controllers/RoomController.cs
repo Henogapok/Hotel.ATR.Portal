@@ -1,7 +1,12 @@
 ﻿using Hotel.ATR.Portal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.Intrinsics.Arm;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace Hotel.ATR.Portal.Controllers
 {
@@ -9,21 +14,38 @@ namespace Hotel.ATR.Portal.Controllers
     {
         private IWebHostEnvironment webHost;
         private readonly ILogger<RoomController> _logger;
-        private HotelAtrContext _db;
 
-        public RoomController(IWebHostEnvironment webHost, ILogger<RoomController> _logger, HotelAtrContext db)
+        public RoomController(IWebHostEnvironment webHost, ILogger<RoomController> _logger)
         {
             this.webHost = webHost;
             this._logger = _logger;
-            _db = db;
         }
 
         //[Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             RoomData rd = new RoomData();
-            rd.Rooms = _db.Rooms.ToList();
-            rd.Clients = _db.Clients.ToList();
+
+            string jwt = GenerateJSONWebToken();
+
+            using (var httpClient = new HttpClient())
+            {
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+                using (var response = await httpClient.GetAsync("http://localhost:5157/api/Room/"))
+                {
+                    string apiRequest = await response.Content.ReadAsStringAsync();
+
+                    rd.Rooms = JsonConvert.DeserializeObject<List<Room>>(apiRequest);
+                }
+                using (var response = await httpClient.GetAsync("http://localhost:5157/api/Client/"))
+                {
+                    string apiRequest = await response.Content.ReadAsStringAsync();
+
+                    rd.Clients = JsonConvert.DeserializeObject<List<Client>>(apiRequest);
+                }
+            }
+           
 
             _logger.LogInformation("Logging Information");
             _logger.LogError("Logging Error");
@@ -60,6 +82,20 @@ namespace Hotel.ATR.Portal.Controllers
             //return View("Index");
             return RedirectToAction("Index");
             //return View("~/Views/Home/Index.cshtml");
+        }
+
+        private string GenerateJSONWebToken()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4c53ce9de0ab7c9ce2f72f2b1447aa73"));
+            var credential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: "John Doe",
+                audience: "1516239022",
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: credential);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

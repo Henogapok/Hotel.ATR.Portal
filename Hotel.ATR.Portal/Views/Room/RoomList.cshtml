@@ -1,4 +1,6 @@
-﻿<!-- Breadcrumb Area Start-->
+﻿@model RoomData
+
+<!-- Breadcrumb Area Start-->
 <section class="breadcrumb-area overlay-dark-2 bg-3">
     <div class="container">
         <div class="row">
@@ -175,7 +177,7 @@
 <!-- Room Area End -->
 <!-- Client Area Start -->
 @{
-    Html.RenderPartial("_ClientArea");
+    Html.RenderPartial("_ClientArea", Model);
 }
 <!-- Client Area End -->
 <!-- Newsletter Area Start -->
